@@ -61,6 +61,6 @@ database/     # schema.sql
 * Bcrypt password hashing
 * Session-based auth (httpOnly cookies)
 * Input validation & SQL injection protection
-* Rate limiting + Helmet security headers
+
 
 
