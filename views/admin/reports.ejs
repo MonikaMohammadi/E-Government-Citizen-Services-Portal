@@ -1,0 +1,84 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+  <h1>Reports & Statistics</h1>
+
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Total Revenue</h5>
+          <h2 class="text-success">$<%= totalRevenue || 0 %></h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Requests by Status</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Total Requests</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (reports && reports.length > 0) { %>
+        <% reports.forEach(report => { %>
+        <tr>
+          <td><%= report.status %></td>
+          <td><%= report.count %></td>
+        </tr>
+        <% }) %>
+      <% } else { %>
+        <tr><td colspan="2">No data available</td></tr>
+      <% } %>
+    </tbody>
+  </table>
+
+  <h3 class="mt-4">Requests by Service</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>Total Requests</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (servicesReport && servicesReport.length > 0) { %>
+        <% servicesReport.forEach(s => { %>
+        <tr>
+          <td><%= s.name %></td>
+          <td><%= s.count %></td>
+        </tr>
+        <% }) %>
+      <% } else { %>
+        <tr><td colspan="2">No data available</td></tr>
+      <% } %>
+    </tbody>
+  </table>
+
+  <h3 class="mt-4">Requests by Department</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Department</th>
+        <th>Total Requests</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (departmentReport && departmentReport.length > 0) { %>
+        <% departmentReport.forEach(d => { %>
+        <tr>
+          <td><%= d.name %></td>
+          <td><%= d.count %></td>
+        </tr>
+        <% }) %>
+      <% } else { %>
+        <tr><td colspan="2">No data available</td></tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

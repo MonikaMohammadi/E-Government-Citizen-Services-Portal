@@ -1,0 +1,57 @@
+<%- include('../partials/header') %>
+<div class="container mt-4">
+  <h1>Services</h1>
+
+  <form action="/admin/services/add" method="POST" class="mb-3">
+    <div class="row g-2">
+      <div class="col-md-4">
+        <input type="text" name="name" class="form-control" placeholder="Service Name" required>
+      </div>
+      <div class="col-md-4">
+        <select name="department_id" class="form-select" required>
+          <option value="">Select Department</option>
+          <% departments.forEach(dep => { %>
+          <option value="<%= dep.id %>"><%= dep.name %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <input type="number" name="fee" class="form-control" placeholder="Fee" required>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary w-100">Add Service</button>
+      </div>
+    </div>
+  </form>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Fee</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% services.forEach(service => { %>
+      <tr>
+        <td><%= service.id %></td>
+        <td><%= service.name %></td>
+        <td><%= service.department_name %></td>
+        <td>$<%= service.fee %></td>
+        <td>
+          <form action="/admin/services/delete/<%= service.id %>" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <a href="/admin/dashboard" class="btn btn-secondary mb-3">Back to Dashboard</a>
+</div>
+
+<%- include('../partials/footer') %>
+

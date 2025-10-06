@@ -1,0 +1,62 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+  <h1>Welcome, <%= citizen.name %>!</h1><br>
+ 
+  <h3>Notifications</h3>
+  <ul class="list-group mb-4">
+    <% if (notifications && notifications.length > 0) { %>
+      <% notifications.forEach(n => { %>
+        <li class="list-group-item d-flex justify-content-between align-items-center <%= n.is_read ? '' : 'fw-bold' %>">
+          <div>
+            <%= n.message %>
+            <br>
+            <small class="text-muted"><%= new Date(n.created_at).toLocaleString() %></small>
+          </div>
+          <% if (!n.is_read) { %>
+            <form action="/citizen/notifications/<%= n.id %>/mark-read" method="POST" class="ms-3">
+              <button type="submit" class="btn btn-sm btn-success">Mark as Read</button>
+            </form>
+          <% } %>
+        </li>
+      <% }) %>
+    <% } else { %>
+      <li class="list-group-item">No notifications yet.</li>
+    <% } %>
+  </ul>
+  
+  <h3>Your Service Requests</h3>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Service</th>
+        <th>Status</th>
+        <th>Submitted At</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (requests.length === 0) { %>
+        <tr><td colspan="5" class="text-center">No requests submitted yet.</td></tr>
+      <% } else { %>
+        <% requests.forEach(req => { %>
+          <tr>
+            <td><%= req.id %></td>
+            <td><%= req.service_name %></td>
+            <td><%= req.status %></td>
+            <td><%= new Date(req.submitted_at).toLocaleString() %></td>
+            <td>
+              <a href="/citizen/request/<%= req.id %>" class="btn btn-info btn-sm">View</a>
+              <% if (req.payment_status !== 'Paid') { %>
+                <a href="/citizen/pay/<%= req.id %>" class="btn btn-success btn-sm">Pay</a>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

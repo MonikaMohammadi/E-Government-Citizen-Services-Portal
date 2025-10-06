@@ -1,0 +1,72 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+      <h2 class="mb-0">Request #<%= request.id %> Details</h2>
+    </div>
+    <div class="card-body">
+      <p><strong>Citizen:</strong> <%= request.citizen_name %></p>
+      <p><strong>Service:</strong> <%= request.service_name %></p>
+      <p><strong>Status:</strong> 
+        <span class="badge 
+          <% if(request.status === 'pending') { %>bg-warning<% } 
+            else if(request.status === 'approved') { %>bg-success<% } 
+            else if(request.status === 'rejected') { %>bg-danger<% } 
+            else if(request.status === 'under_review') { %>bg-warning<% } 
+            else if(request.status === 'submitted') { %>text-dark<% } %>">
+          <%= request.status %>
+        </span>
+      </p>
+
+      <p><strong>Submitted At:</strong> <%= new Date(request.submitted_at).toLocaleString() %></p>
+
+
+      <hr>
+
+      <h4>Documents</h4>
+      <ul>
+        <% if (documents.length === 0) { %>
+          <li>No documents uploaded.</li>
+        <% } else { %>
+          <% documents.forEach(doc => { %>
+            <% 
+              // Normalize path separators (\ or /) and extract filename
+              const fileName = doc.file_path.replace(/^.*[\\\/]/, ''); 
+              const fileUrl = '/uploads/' + fileName; 
+            %>
+            <li>
+              <a href="<%= fileUrl %>" target="_blank"><%= fileName %></a>
+            </li>
+          <% }) %>
+        <% } %>
+      </ul>
+
+      <h4>Review Request</h4>
+      <% if (request.status === 'Pending') { %>
+        <form action="/officer/request/<%= request.id %>/review" method="POST">
+          <div class="mb-3">
+            <label for="status" class="form-label">Update Status</label>
+            <select class="form-select" name="status" id="status" required>
+              <option value="Under Review">Under Review</option>
+              <option value="Approved">Approved</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="comment" class="form-label">Comment (optional)</label>
+            <textarea class="form-control" name="comment" id="comment" rows="3"></textarea>
+          </div>
+          <button type="submit" class="btn btn-success">Submit Review</button>
+        </form>
+      <% } else { %>
+        <div class="alert alert-info mt-3">
+          This request has already been <strong><%= request.status %></strong>.
+        </div>
+      <% } %>
+    </div>
+  </div>
+      <a href="/officer/dashboard" class="btn btn-secondary mt-4">Back to Dashboard</a>
+</div>
+
+<%- include('../partials/footer') %>

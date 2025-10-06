@@ -1,0 +1,37 @@
+<%- include('../partials/header') %>
+<div class="container mt-4">
+  <h1>Departments</h1>
+
+  <form action="/admin/departments/add" method="POST" class="mb-3">
+    <div class="input-group">
+      <input type="text" name="name" class="form-control" placeholder="New Department Name" required>
+      <button class="btn btn-primary">Add Department</button>
+    </div>
+  </form>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% departments.forEach(dep => { %>
+      <tr>
+        <td><%= dep.id %></td>
+        <td><%= dep.name %></td>
+        <td>
+          <form action="/admin/departments/delete/<%= dep.id %>" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <a href="/admin/dashboard" class="btn btn-secondary mb-3">Back to Dashboard</a>
+</div>
+
+<%- include('../partials/footer') %>

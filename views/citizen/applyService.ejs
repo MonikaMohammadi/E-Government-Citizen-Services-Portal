@@ -1,0 +1,22 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+  <h1>Apply for a Service</h1>
+  <form action="/citizen/apply-service" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="service_id" class="form-label">Select Service</label>
+      <select class="form-select" name="service_id" id="service_id" required>
+        <% services.forEach(service => { %>
+          <option value="<%= service.id %>"><%= service.name %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="documents" class="form-label">Upload Documents</label>
+      <input type="file" class="form-control" name="documents" id="documents" multiple>
+    </div>
+    <button type="submit" class="btn btn-success">Submit Request</button>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

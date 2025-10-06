@@ -1,0 +1,15 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+  <h2>Payment for Request #<%= requestId %></h2>
+
+  <form action="/citizen/pay/<%= requestId %>" method="POST">
+    <div class="mb-3">
+      <label class="form-label">Amount</label>
+      <input type="text" class="form-control" value="$50" readonly>
+    </div>
+    <button type="submit" class="btn btn-success">Pay Now</button>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

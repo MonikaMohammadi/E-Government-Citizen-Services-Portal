@@ -1,0 +1,155 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <h2 class="mb-4"><i class="bi bi-person-circle"></i> My Profile</h2>
+
+            <% if (success && success.length > 0) { %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <%= success %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <% } %>
+
+            <% if (error && error.length > 0) { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <%= error %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <% } %>
+
+            <!-- Profile Information Card -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Profile Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Name:</div>
+                        <div class="col-md-8"><%= user.name %></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Email:</div>
+                        <div class="col-md-8"><%= user.email %></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Role:</div>
+                        <div class="col-md-8">
+                            <span class="badge bg-info text-dark"><%= user.role %></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Phone:</div>
+                        <div class="col-md-8"><%= user.phone || 'Not provided' %></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Address:</div>
+                        <div class="col-md-8"><%= user.address || 'Not provided' %></div>
+                    </div>
+                    <% if (user.role === 'citizen') { %>
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold">National ID:</div>
+                            <div class="col-md-8"><%= user.national_id || 'Not provided' %></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold">Date of Birth:</div>
+                            <div class="col-md-8">
+                                <%= user.date_of_birth ? new Date(user.date_of_birth).toLocaleDateString() : 'Not provided' %>
+                            </div>
+                        </div>
+                    <% } %>
+                    <% if (user.role === 'officer' || user.role === 'department_head') { %>
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold">Department:</div>
+                            <div class="col-md-8"><%= user.department_name || 'Not assigned' %></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4 fw-bold">Job Title:</div>
+                            <div class="col-md-8"><%= user.job_title || 'Not specified' %></div>
+                        </div>
+                    <% } %>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Member Since:</div>
+                        <div class="col-md-8">
+                            <%= new Date(user.created_at).toLocaleDateString() %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Update Profile Form -->
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Update Profile</h5>
+                </div>
+                <div class="card-body">
+                    <form action="/profile/update" method="POST">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                   value="<%= user.name %>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="phone" name="phone"
+                                   value="<%= user.phone || '' %>"
+                                   placeholder="+1-234-567-8900">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea class="form-control" id="address" name="address" rows="3"><%= user.address || '' %></textarea>
+                        </div>
+                        <% if (user.role === 'citizen') { %>
+                            <div class="mb-3">
+                                <label for="national_id" class="form-label">National ID</label>
+                                <input type="text" class="form-control" id="national_id" name="national_id"
+                                       value="<%= user.national_id || '' %>">
+                            </div>
+                            <div class="mb-3">
+                                <label for="date_of_birth" class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
+                                       value="<%= user.date_of_birth ? new Date(user.date_of_birth).toISOString().split('T')[0] : '' %>">
+                            </div>
+                        <% } %>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Update Profile
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Change Password Form -->
+            <div class="card mb-4">
+                <div class="card-header bg-warning">
+                    <h5 class="mb-0">Change Password</h5>
+                </div>
+                <div class="card-body">
+                    <form action="/profile/change-password" method="POST">
+                        <div class="mb-3">
+                            <label for="currentPassword" class="form-label">Current Password</label>
+                            <input type="password" class="form-control" id="currentPassword"
+                                   name="currentPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">New Password</label>
+                            <input type="password" class="form-control" id="newPassword"
+                                   name="newPassword" required minlength="6">
+                            <div class="form-text">Password must be at least 6 characters long</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                            <input type="password" class="form-control" id="confirmPassword"
+                                   name="confirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-key"></i> Change Password
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

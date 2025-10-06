@@ -1,0 +1,19 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+  <h2>Notifications</h2>
+  <ul class="list-group">
+    <% if (notifications.length === 0) { %>
+      <li class="list-group-item">No notifications yet.</li>
+    <% } else { %>
+      <% notifications.forEach(n => { %>
+        <li class="list-group-item d-flex justify-content-between">
+          <span><%= n.message %></span>
+          <small class="text-muted"><%= new Date(n.created_at).toLocaleString() %></small>
+        </li>
+      <% }) %>
+    <% } %>
+  </ul>
+</div>
+
+<%- include('../partials/footer') %>

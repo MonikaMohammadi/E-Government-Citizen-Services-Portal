@@ -1,0 +1,80 @@
+<%- include('../partials/header') %>
+
+
+<div class="container mt-4">
+  <h1>Admin Dashboard</h1>
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card text-white bg-primary mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Total Users</h5>
+          <p class="card-text"><%= users.length %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-white bg-success mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Total Services</h5>
+          <p class="card-text"><%= services.length %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-white bg-warning mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Total Requests</h5>
+          <p class="card-text"><%= requests.length %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Recent Requests</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Citizen</th>
+        <th>Service</th>
+        <th>Status</th>
+        <th>Submitted At</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% requests.forEach(req => { %>
+        <tr>
+          <td><%= req.id %></td>
+          <td><%= req.citizen %></td>
+          <td><%= req.service %></td>
+          <td><%= req.status %></td>
+          <td><%= new Date(req.submitted_at).toLocaleString() %></td>
+          <td>
+            <form action="/admin/requests/update/<%= req.id %>" method="POST" style="display:inline;">
+              <input type="hidden" name="status" value="pending">
+              <button class="btn btn-warning btn-sm">Pending</button>
+            </form>
+
+            <form action="/admin/requests/update/<%= req.id %>" method="POST" style="display:inline;">
+              <input type="hidden" name="status" value="under_review">
+              <button class="btn btn-success btn-sm">Under Review</button>
+            </form>
+
+             <form action="/admin/requests/update/<%= req.id %>" method="POST" style="display:inline;">
+              <input type="hidden" name="status" value="approved">
+              <button class="btn btn-success btn-sm">Approve</button>
+            </form>
+
+            <form action="/admin/requests/update/<%= req.id %>" method="POST" style="display:inline;">
+              <input type="hidden" name="status" value="rejected">
+              <button class="btn btn-danger btn-sm">Reject</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,39 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+  <h1>Officer Dashboard</h1>
+  
+  <h3>Pending Service Requests</h3>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Citizen Name</th>
+        <th>Service</th>
+        <th>Status</th>
+        <th>Submitted At</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (requests.length === 0) { %>
+        <tr><td colspan="6" class="text-center">No requests to review.</td></tr>
+      <% } else { %>
+        <% requests.forEach(req => { %>
+          <tr>
+            <td><%= req.id %></td>
+            <td><%= req.citizen_name %></td>
+            <td><%= req.service_name %></td>
+            <td><%= req.status %></td>
+            <td><%= new Date(req.submitted_at).toLocaleString() %></td>
+            <td>
+              <a href="/officer/request/<%= req.id %>" class="btn btn-info btn-sm">Review</a>
+            </td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>
