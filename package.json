@@ -10,8 +10,7 @@
     "db:setup": "psql -U postgres -d egovernment -f database/schema.sql",
     "db:reset": "npm run db:setup && npm run seed",
     "setup": "./setup.sh",
-    "postinstall": "npm run deploy:setup",
-    "deploy:setup": "node database/setup.js && node database/seed.js"
+    "postinstall": "npm run seed"
   },
   "keywords": [],
   "author": "",
