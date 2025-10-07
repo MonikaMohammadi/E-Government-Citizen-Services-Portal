@@ -9,7 +9,8 @@
     "seed": "node database/seed.js",
     "db:setup": "psql -U postgres -d egovernment -f database/schema.sql",
     "db:reset": "npm run db:setup && npm run seed",
-    "setup": "./setup.sh"
+    "setup": "./setup.sh",
+    "postinstall": "npm run seed"
   },
   "keywords": [],
   "author": "",
