@@ -1,19 +1,35 @@
 const pool = require('../config/db');
 const bcrypt = require('bcryptjs');
+const setupDatabase = require('./setup');
 
 async function seed() {
     try {
         console.log('Starting database seeding...');
 
-        // Clean existing data (optional - comment out in production)
-        console.log('Cleaning existing data...');
-        await pool.query('TRUNCATE TABLE notifications CASCADE');
-        await pool.query('TRUNCATE TABLE payments CASCADE');
-        await pool.query('TRUNCATE TABLE documents CASCADE');
-        await pool.query('TRUNCATE TABLE requests CASCADE');
-        await pool.query('TRUNCATE TABLE services CASCADE');
-        await pool.query('TRUNCATE TABLE departments CASCADE');
-        await pool.query('TRUNCATE TABLE users CASCADE');
+        // First, ensure tables exist
+        console.log('Ensuring database schema exists...');
+        try {
+            await setupDatabase();
+        } catch (err) {
+            console.log('Schema setup error (may be already created):', err.message);
+        }
+
+        // Check if tables exist and clean existing data
+        console.log('Checking and cleaning existing data...');
+        try {
+            const tableCheck = await pool.query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'users'");
+            if (tableCheck.rows.length > 0) {
+                await pool.query('TRUNCATE TABLE notifications CASCADE');
+                await pool.query('TRUNCATE TABLE payments CASCADE');
+                await pool.query('TRUNCATE TABLE documents CASCADE');
+                await pool.query('TRUNCATE TABLE requests CASCADE');
+                await pool.query('TRUNCATE TABLE services CASCADE');
+                await pool.query('TRUNCATE TABLE departments CASCADE');
+                await pool.query('TRUNCATE TABLE users CASCADE');
+            }
+        } catch (err) {
+            console.log('Tables might not exist yet, will create with sample data...');
+        }
 
         // Create departments
         console.log('Creating departments...');
