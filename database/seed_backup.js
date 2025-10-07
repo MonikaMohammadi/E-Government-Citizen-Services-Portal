@@ -85,11 +85,12 @@ async function seed() {
         `, [hashedPassword]);
 
         // Department heads
-        await pool.query(`
+        const deptHeads = await pool.query(`
             INSERT INTO users (name, email, password, role, department_id, job_title, phone, address, created_at) VALUES
             ('Ahmad', 'ahmad.interior@egov.com', $1, 'department_head', ${deptMap['Interior']}, 'Department Head', '+93 72 000 1120', 'Kabul', NOW()),
             ('Jawad', 'jawad.commerce@egov.com', $1, 'department_head', ${deptMap['Commerce']}, 'Department Head', '+93 72 000 1120', 'Mazar', NOW()),
             ('Sara', 'sara.housing@egov.com', $1, 'department_head', ${deptMap['Housing']}, 'Department Head', '+93 72 000 1120', 'Herat', NOW())
+            RETURNING id, name
         `, [hashedPassword]);
 
         // Officers
@@ -102,7 +103,7 @@ async function seed() {
             RETURNING id, name
         `, [hashedPassword]);
 
-        // Citizens
+        // Citizens 
         const citizens = await pool.query(`
             INSERT INTO users (name, email, password, role, national_id, date_of_birth, phone, address, created_at) VALUES
             ('Morsal', 'morsal@gmail.com', $1, 'citizen', 'AFG123456', '1990-05-15', '+93 74 567 8910', 'Mahbas St, Herat', NOW()),
@@ -183,7 +184,7 @@ async function seed() {
         console.log('\nOfficers:');
         console.log('  ali@egov.com');
         console.log('  bahram@egov.com');
-        console.log('  sabor@egov.com');
+        console.log('  bahram@egov.com');
         console.log('  dawood@egov.com');
         console.log('\nCitizens:');
         console.log('  morsal@gmail.com');
